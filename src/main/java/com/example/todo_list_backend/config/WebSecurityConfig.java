@@ -15,11 +15,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.todo_list_backend.filters.JwtRequestFilter;
+import com.example.todo_list_backend.util.JwtAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+
+  @Autowired
+  private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
   @Autowired
   private JwtRequestFilter requestFilter;
@@ -35,9 +39,10 @@ public class WebSecurityConfig {
         .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.disable())
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/api/v1/register", "/api/v1/authentication").permitAll()
+            .requestMatchers("/api/v1/register", "/api/v1/login").permitAll()
             .requestMatchers("/api/v1/**").authenticated()
             .anyRequest().authenticated())
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
         .sessionManagement(management -> management
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)

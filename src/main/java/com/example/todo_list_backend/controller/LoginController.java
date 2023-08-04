@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1")
-public class Authenticationcontroller {
+public class LoginController {
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -34,10 +34,11 @@ public class Authenticationcontroller {
   @Autowired
   private JwtUtil jwtUtil;
 
-  @PostMapping("/authentication")
+  @PostMapping("/login")
   public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
       HttpServletResponse response)
       throws BadCredentialsException, IOException, DisabledException, UsernameNotFoundException {
+    // disabled exception when there is no user in database with that email password
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),
           authenticationRequest.getPassword()));
