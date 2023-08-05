@@ -6,4 +6,6 @@ public interface UserService {
   UserDto createUser(UserDto userDto);
 
   UserDto getUserById(Integer userId);
+
+  Long getUserIdByUsername(String sessionUsername);
 }

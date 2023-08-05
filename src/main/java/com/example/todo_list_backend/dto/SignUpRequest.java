@@ -20,6 +20,7 @@ public class SignUpRequest {
   private String password;
 
   @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE, message = "Email address is not valid")
+  @NotEmpty(message = "email can't be empty")
   private String email;
 
 }

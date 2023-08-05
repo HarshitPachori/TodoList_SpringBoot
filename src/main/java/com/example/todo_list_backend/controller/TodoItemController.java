@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.todo_list_backend.dto.CustomMessage;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 public class TodoItemController {
 
   @GetMapping("/hello")
