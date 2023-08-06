@@ -9,7 +9,10 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.example.todo_list_backend.exception.TokenExpiredException;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -19,7 +22,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
   public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A7134737";
-  public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+  public static final long JWT_TOKEN_VALIDITY = 50 * 60 * 60;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -42,8 +45,14 @@ public class JwtUtil {
         .getBody();
   }
 
-  private boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
+  public boolean isTokenExpired(String token) {
+    try {
+      Date expirationDate = extractExpiration(token);
+      return expirationDate.before(new Date());
+    } catch (ExpiredJwtException ex) {
+      throw new TokenExpiredException("Jwt Token Expired , Login Again");
+    }
+
   }
 
   public boolean validateToken(String token, UserDetails userDetails) {

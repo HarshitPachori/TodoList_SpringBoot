@@ -5,13 +5,18 @@ import java.util.List;
 import com.example.todo_list_backend.dto.TodoItemDto;
 
 public interface TodoItemService {
-  TodoItemDto createTodoItem(TodoItemDto todoItemDto);
+  TodoItemDto createTodoItem(TodoItemDto todoItemDto, Long todoListId);
 
-  TodoItemDto updateTodoItem(TodoItemDto todoItemDto, Integer todoItemId);
+  TodoItemDto updateTodoItem(TodoItemDto todoItemDto, Long todoItemId);
 
-  TodoItemDto getTodoItemById(Integer todoItemId);
+  TodoItemDto getTodoItemById(Long todoItemId);
 
-  List<TodoItemDto> getAllTodoItemByTodoListId(Integer todoListId);
+  List<TodoItemDto> getAllTodoItemByTodoListId(Long todoListId);
 
-  void deleteTodoItemById(Integer todoItemId);
+  void deleteTodoItemById(Long todoItemId);
+
+  TodoItemDto markAsComplete(Long todoItemId, boolean complete);
+
+  boolean isUserAuthorizedForTodoList(Long todoItemId, String username);
+
 }

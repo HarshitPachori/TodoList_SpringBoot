@@ -44,6 +44,7 @@ public class WebSecurityConfig {
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/api/hello").permitAll()
             // .requestMatchers("/api/users/**").authenticated()
             .anyRequest().authenticated())
+           
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
         .sessionManagement(management -> management
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

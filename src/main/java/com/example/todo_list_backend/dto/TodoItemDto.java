@@ -14,6 +14,8 @@ public class TodoItemDto {
 
   @NotEmpty(message = "Please add Description")
   private String description;
+
   private boolean completed;
+  
   private LocalDate dueDate;
 }

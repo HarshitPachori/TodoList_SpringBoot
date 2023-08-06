@@ -10,9 +10,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.todo_list_backend.exception.TokenExpiredException;
 import com.example.todo_list_backend.services.implementation.UserDetailServiceImpl;
 import com.example.todo_list_backend.util.JwtUtil;
 
+import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,12 +36,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     String header = request.getHeader("Authorization");
     String token = null;
     String username = null;
+
     if (header != null && header.startsWith("Bearer ")) {
       token = header.substring(7);
+      
       username = jwtUtil.extractUsername(token);
     }
+
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = userDetailService.loadUserByUsername(username);
+      
+      if (jwtUtil.isTokenExpired(token)) {
+        throw new TokenExpiredException("Token is expired, login again");
+      }
       if (jwtUtil.validateToken(token, userDetails)) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
             null, userDetails.getAuthorities());

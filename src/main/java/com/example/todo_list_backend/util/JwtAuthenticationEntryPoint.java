@@ -3,9 +3,12 @@ package com.example.todo_list_backend.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+
+import com.example.todo_list_backend.exception.TokenExpiredException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +20,17 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
       throws IOException, ServletException {
+
+    // PrintWriter writer = response.getWriter();
+    // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    // writer.println("Access Denied !! " + authException.getMessage());
+
+    response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
     PrintWriter writer = response.getWriter();
-    writer.println("Access Denied !! " + authException.getMessage());
+
+    writer.println("{\"error\":\"Access Denied !! " + authException.getMessage() + "\"}");
   }
 
 }

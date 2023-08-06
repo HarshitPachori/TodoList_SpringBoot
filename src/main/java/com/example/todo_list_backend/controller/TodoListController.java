@@ -36,7 +36,7 @@ public class TodoListController {
       @PathVariable("userId") Long userId, Principal principal) {
     String sessionUsername = principal.getName();
     if (!userId.equals(userService.getUserIdByUsername(sessionUsername))) {
-      return new ResponseEntity<>("You are not Authorized to do this ...", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>(new ApiResponse("User not Authorized for that TodoList", false),HttpStatus.FORBIDDEN);
     }
     TodoListDto createTodoList = todoListService.createTodoList(todoListDto, userId);
     return new ResponseEntity<TodoListDto>(createTodoList, HttpStatus.CREATED);
