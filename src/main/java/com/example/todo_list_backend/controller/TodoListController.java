@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-
-
 @Tag(name = "TodoList API", description = "This API contains different todolist operation endpoints.")
 @RestController
 @RequestMapping("/api")
@@ -41,7 +40,7 @@ public class TodoListController {
   private UserService userService;
 
   // POST create todolist
-    @Operation(summary = "Create a todoList by a specific User")
+  @Operation(summary = "Create a todoList by a specific User")
   @ApiResponses(value = {
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Created a TodoList", content = {
           @Content(mediaType = "application/json", schema = @Schema(implementation = TodoListDto.class)) }),
@@ -52,9 +51,29 @@ public class TodoListController {
       @PathVariable("userId") Long userId, Principal principal) {
     String sessionUsername = principal.getName();
     if (!userId.equals(userService.getUserIdByUsername(sessionUsername))) {
-      return new ResponseEntity<>(new ApiResponse("User not Authorized for that TodoList", false),HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>(new ApiResponse("User not Authorized for that TodoList", false),
+          HttpStatus.FORBIDDEN);
     }
     TodoListDto createTodoList = todoListService.createTodoList(todoListDto, userId);
+    return new ResponseEntity<TodoListDto>(createTodoList, HttpStatus.CREATED);
+  }
+
+  // PUT update todolist
+  @Operation(summary = "Update a todoList by a todoListId")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Created a TodoList", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoListDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
+  @PutMapping("/users/{userId}/todolist/{todoListId}")
+  public ResponseEntity<?> updateTodoList(@RequestBody TodoListDto todoListDto,
+      @PathVariable("todoListId") Long todoListId, @PathVariable("userId") Long userId, Principal principal) {
+    String sessionUsername = principal.getName();
+    if (!userId.equals(userService.getUserIdByUsername(sessionUsername))) {
+      return new ResponseEntity<>(new ApiResponse("User not Authorized for that TodoList", false),
+          HttpStatus.FORBIDDEN);
+    }
+    TodoListDto createTodoList = todoListService.updateTodoList(todoListDto, todoListId);
     return new ResponseEntity<TodoListDto>(createTodoList, HttpStatus.CREATED);
   }
 

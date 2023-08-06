@@ -61,6 +61,14 @@ To create a new todo item for an authenticated user, send a `POST` request to `/
     "todoListName": "Food"
 }
 
+### Update a Todo List
+
+To create a new todo item for an authenticated user, send a `PUT` request to `/api/users/{userId}/todolist` with the following JSON payload:
+
+{
+    "todoListName": "Food"
+}
+
 ### Get a Todo List by Id
 
 To create a new todo item for an authenticated user, send a `GET` request to `/api/users/todolist{todoListId}`.
