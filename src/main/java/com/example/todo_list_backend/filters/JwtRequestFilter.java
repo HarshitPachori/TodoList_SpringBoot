@@ -14,7 +14,6 @@ import com.example.todo_list_backend.exception.TokenExpiredException;
 import com.example.todo_list_backend.services.implementation.UserDetailServiceImpl;
 import com.example.todo_list_backend.util.JwtUtil;
 
-import jakarta.security.auth.message.AuthException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

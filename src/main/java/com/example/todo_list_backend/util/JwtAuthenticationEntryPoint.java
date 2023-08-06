@@ -3,12 +3,9 @@ package com.example.todo_list_backend.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
-import com.example.todo_list_backend.exception.TokenExpiredException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

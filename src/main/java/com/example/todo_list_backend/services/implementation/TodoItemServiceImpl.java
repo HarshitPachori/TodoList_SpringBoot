@@ -2,10 +2,7 @@ package com.example.todo_list_backend.services.implementation;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +13,11 @@ import com.example.todo_list_backend.models.TodoItem;
 import com.example.todo_list_backend.models.TodoList;
 import com.example.todo_list_backend.repositories.TodoItemRepository;
 import com.example.todo_list_backend.repositories.TodoListRepository;
-import com.example.todo_list_backend.repositories.UserRepository;
 import com.example.todo_list_backend.services.TodoItemService;
 
 @Service
 public class TodoItemServiceImpl implements TodoItemService {
 
-  @Autowired
-  private UserRepository userRepository;
 
   @Autowired
   private ModelMapper modelMapper;
