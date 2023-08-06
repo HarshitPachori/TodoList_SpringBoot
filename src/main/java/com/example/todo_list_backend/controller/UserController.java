@@ -21,6 +21,7 @@ import com.example.todo_list_backend.dto.AuthenticationRequest;
 import com.example.todo_list_backend.dto.AuthenticationResponse;
 import com.example.todo_list_backend.dto.CustomMessage;
 import com.example.todo_list_backend.dto.SignUpRequest;
+import com.example.todo_list_backend.dto.TodoListDto;
 import com.example.todo_list_backend.dto.UserDto;
 import com.example.todo_list_backend.models.User;
 import com.example.todo_list_backend.repositories.UserRepository;
@@ -28,9 +29,15 @@ import com.example.todo_list_backend.services.AuthService;
 import com.example.todo_list_backend.services.implementation.UserDetailServiceImpl;
 import com.example.todo_list_backend.util.JwtUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+@Tag(name = "User API", description = "This API contains different User operation endpoints.")
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -50,6 +57,10 @@ public class UserController {
   @Autowired
   private JwtUtil jwtUtil;
 
+  @Operation(summary = "Register a User")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Registered user", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = SignUpRequest.class)) }) })
   @PostMapping("/register")
   public ResponseEntity<?> createUser(@Valid @RequestBody SignUpRequest signUpRequest) {
     User user = userRepository.findFirstByEmail(signUpRequest.getEmail());
@@ -63,6 +74,11 @@ public class UserController {
     return new ResponseEntity<>(new ApiResponse("User already exists", false), HttpStatus.BAD_REQUEST);
   }
 
+  @Operation(summary = "Authenticate a user")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "User authenticated", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoListDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found", content = @Content) })
   @PostMapping("/login")
   public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
       HttpServletResponse response)

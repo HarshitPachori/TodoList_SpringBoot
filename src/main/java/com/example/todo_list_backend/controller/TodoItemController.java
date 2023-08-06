@@ -24,7 +24,10 @@ import com.example.todo_list_backend.services.TodoItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "TodoListItem API", description = "This API contains different todoListItem operation endpoints.")
 @RestController
 @RequestMapping("/api/users/todolist")
 public class TodoItemController {
@@ -32,6 +35,12 @@ public class TodoItemController {
   @Autowired
   private TodoItemService todoItemService;
 
+  @Operation(summary = "Create a todoItem in a specific TodoList")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Created a TodoItem", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "TodoList not found", content = @Content) })
   @PostMapping("/{todoListId}/todoitem")
   public ResponseEntity<?> createTodoItem(@PathVariable("todoListId") Long todoListId,
       @RequestBody TodoItemDto todoItemDto,
@@ -45,10 +54,12 @@ public class TodoItemController {
     return new ResponseEntity<>(createTodoItem, HttpStatus.CREATED);
   }
 
-  @Operation(summary = "Get TodoItem by Id")
-  @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", content = {
-      @Content(schema = @Schema(implementation = TodoItemDto.class), mediaType = "application/json")
-  })
+  @Operation(summary = "Get a todoItem in a TodoList by todoItemId")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Got a TodoItem", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
   @GetMapping("/{todoListId}/todoitem/{todoItemId}")
   public ResponseEntity<?> getTodoItembyId(
       @PathVariable("todoListId") Long todoListId,
@@ -65,6 +76,12 @@ public class TodoItemController {
     return new ResponseEntity<>(todoItem, HttpStatus.OK);
   }
 
+  @Operation(summary = "Get all todoItems in a specific TodoList")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Got list of TodoItems", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
   @GetMapping("/{todoListId}/todoitem")
   public ResponseEntity<?> getAllTodoItemsForTodoList(
       @PathVariable("todoListId") Long todoListId,
@@ -79,6 +96,12 @@ public class TodoItemController {
     return new ResponseEntity<>(todoItems, HttpStatus.OK);
   }
 
+  @Operation(summary = "Update a todoItem in a specific TodoList")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Updated a TodoItem", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
   @PutMapping("/{todoListId}/todoitem/{todoItemId}")
   public ResponseEntity<?> updateTodoItem(
       @PathVariable("todoListId") Long todoListId,
@@ -96,6 +119,12 @@ public class TodoItemController {
     return new ResponseEntity<>(updatedTodoItem, HttpStatus.OK);
   }
 
+  @Operation(summary = "Mark a todoItem as completed")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Marked TodoItem as completed", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
   @PatchMapping("/{todoListId}/todoitem/{todoItemId}")
   public ResponseEntity<?> markTodoItemAsCompleted(
       @PathVariable("todoListId") Long todoListId,
@@ -113,6 +142,12 @@ public class TodoItemController {
     return new ResponseEntity<>(markedTodoItem, HttpStatus.OK);
   }
 
+  @Operation(summary = "Delete an employee by its id")
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Deleted an TodoItem", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = TodoItemDto.class)) }),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Resource not found", content = @Content) })
   @DeleteMapping("/{todoListId}/todoitem/{todoItemId}")
   public ResponseEntity<?> deleteTodoItem(
       @PathVariable("todoListId") Long todoListId,
